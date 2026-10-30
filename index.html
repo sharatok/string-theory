@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>String Theory — The Fabric of Everything</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0a;
+  --orange:#f97316;
+  --orange2:#fb923c;
+  --orange-dim:#7c3a12;
+  --green:#22c55e;
+  --green2:#4ade80;
+  --green-dim:#14532d;
+  --black:#0a0a0a;
+  --panel:#111111;
+  --panel2:#181818;
+  --border:#252525;
+  --text:#e8e8e8;
+  --muted:#888;
+  --electron:#f97316;
+  --photon:#22c55e;
+  --graviton:#a78bfa;
+  --neutrino:#22d3ee;
+  --quark:#ec4899;
+  --higgs:#eab308;
+  --positron:#3b82f6; /* Blue */
+  --muon:#8b5cf6;     /* Purple */
+  --gluon:#ef4444;    /* Red */
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif}
+#app{width:100%;height:100%;position:relative}
+
+/* SLIDES */
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .7s ease}
+.slide.active{opacity:1;pointer-events:all}
+
+/* NAV */
+#nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:12px;z-index:100;align-items:center}
+.nav-dot{width:10px;height:10px;border-radius:50%;border:1.5px solid var(--muted);cursor:pointer;transition:all .3s}
+.nav-dot.active{background:var(--orange);border-color:var(--orange);box-shadow:0 0 10px var(--orange)}
+.nav-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:8px 18px;font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:.1em;cursor:pointer;transition:all .3s;text-transform:uppercase}
+.nav-btn:hover{border-color:var(--orange);color:var(--orange)}
+
+/* SLIDE LABELS */
+.slide-label{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;padding:28px 40px 0}
+
+/* ========== SLIDE 1 — INTRO ========== */
+#slide1{background:var(--bg)}
+#s1-canvas{position:absolute;inset:0;z-index:0;width:100%;height:100%;display:block}
+.s1-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px}
+.s1-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.3em;color:var(--orange);text-transform:uppercase;margin-bottom:20px;opacity:.8}
+.s1-title{font-size:clamp(52px,9vw,110px);font-weight:700;line-height:.9;letter-spacing:-.02em;margin-bottom:28px}
+.s1-title .t-line1{color:var(--text)}
+.s1-title .t-line2{color:var(--orange);font-style:italic}
+.s1-sub{font-size:17px;color:var(--muted);max-width:600px;line-height:1.7;margin-bottom:40px;font-weight:400}
+.s1-stats{display:flex;gap:40px;margin-top:10px}
+.s1-stat{text-align:center}
+.s1-stat .val{font-size:28px;font-weight:700;color:var(--orange);font-family:'Space Mono',monospace}
+.s1-stat .lbl{font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.s1-hint{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.15em;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+.crisis-box{background:#1a0a00;border:1px solid var(--orange-dim);padding:16px 28px;margin-top:36px;max-width:560px;text-align:left}
+.crisis-title{font-size:11px;letter-spacing:.2em;color:var(--orange);text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:8px}
+.crisis-text{font-size:15px;color:#ccc;line-height:1.6}
+
+/* ========== SLIDE 2 — GRID STRINGS ========== */
+#slide2{background:var(--bg)}
+#s2-canvas{position:absolute;inset:0;z-index:0;width:100%;height:100%;display:block}
+.s2-content{position:relative;z-index:2;display:flex;flex-direction:column;height:100%;padding:0 40px}
+.s2-header{padding:20px 0 16px}
+.s2-title{font-size:38px;font-weight:700;letter-spacing:-.01em}
+.s2-title span{color:var(--orange)}
+.s2-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;flex:1;align-content:start;overflow-y:auto;padding-bottom:80px}
+.s2-grid::-webkit-scrollbar{width:6px}
+.s2-grid::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+.s2-card{background:var(--panel);border:1px solid var(--border);padding:16px;display:flex;flex-direction:column;align-items:center;position:relative;overflow:hidden;cursor:pointer;transition:all .4s}
+.s2-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .4s}
+
+/* Card gradients */
+.s2-card.electron::before{background:radial-gradient(ellipse at 50% 100%,rgba(249,115,22,.08),transparent 70%)}
+.s2-card.photon::before{background:radial-gradient(ellipse at 50% 100%,rgba(34,197,94,.08),transparent 70%)}
+.s2-card.graviton::before{background:radial-gradient(ellipse at 50% 100%,rgba(167,139,250,.08),transparent 70%)}
+.s2-card.neutrino::before{background:radial-gradient(ellipse at 50% 100%,rgba(34,211,238,.08),transparent 70%)}
+.s2-card.quark::before{background:radial-gradient(ellipse at 50% 100%,rgba(236,72,153,.08),transparent 70%)}
+.s2-card.higgs::before{background:radial-gradient(ellipse at 50% 100%,rgba(234,179,8,.08),transparent 70%)}
+.s2-card.positron::before{background:radial-gradient(ellipse at 50% 100%,rgba(59,130,246,.08),transparent 70%)}
+.s2-card.muon::before{background:radial-gradient(ellipse at 50% 100%,rgba(139,92,246,.08),transparent 70%)}
+.s2-card.gluon::before{background:radial-gradient(ellipse at 50% 100%,rgba(239,68,68,.08),transparent 70%)}
+.s2-card:hover::before{opacity:1}
+
+/* Card Borders */
+.s2-card.electron{border-bottom:2px solid var(--electron)}
+.s2-card.photon{border-bottom:2px solid var(--photon)}
+.s2-card.graviton{border-bottom:2px solid var(--graviton)}
+.s2-card.neutrino{border-bottom:2px solid var(--neutrino)}
+.s2-card.quark{border-bottom:2px solid var(--quark)}
+.s2-card.higgs{border-bottom:2px solid var(--higgs)}
+.s2-card.positron{border-bottom:2px solid var(--positron)}
+.s2-card.muon{border-bottom:2px solid var(--muon)}
+.s2-card.gluon{border-bottom:2px solid var(--gluon)}
+
+.s2-card-canvas{width:100%;height:80px}
+.s2-particle-name{font-size:20px;font-weight:700;margin:8px 0 2px;letter-spacing:.05em}
+
+/* Card Text Colors */
+.s2-card.electron .s2-particle-name, .s2-card.electron .s2-mini-val{color:var(--electron)}
+.s2-card.photon .s2-particle-name, .s2-card.photon .s2-mini-val{color:var(--photon)}
+.s2-card.graviton .s2-particle-name, .s2-card.graviton .s2-mini-val{color:var(--graviton)}
+.s2-card.neutrino .s2-particle-name, .s2-card.neutrino .s2-mini-val{color:var(--neutrino)}
+.s2-card.quark .s2-particle-name, .s2-card.quark .s2-mini-val{color:var(--quark)}
+.s2-card.higgs .s2-particle-name, .s2-card.higgs .s2-mini-val{color:var(--higgs)}
+.s2-card.positron .s2-particle-name, .s2-card.positron .s2-mini-val{color:var(--positron)}
+.s2-card.muon .s2-particle-name, .s2-card.muon .s2-mini-val{color:var(--muon)}
+.s2-card.gluon .s2-particle-name, .s2-card.gluon .s2-mini-val{color:var(--gluon)}
+
+.s2-particle-type{font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:10px}
+.s2-freq-bar{width:100%;height:3px;background:#222;margin:6px 0}
+.s2-freq-fill{height:100%;transition:width 2s}
+
+/* Card Fill Colors */
+.s2-card.electron .s2-freq-fill{background:var(--electron)}
+.s2-card.photon .s2-freq-fill{background:var(--photon)}
+.s2-card.graviton .s2-freq-fill{background:var(--graviton)}
+.s2-card.neutrino .s2-freq-fill{background:var(--neutrino)}
+.s2-card.quark .s2-freq-fill{background:var(--quark)}
+.s2-card.higgs .s2-freq-fill{background:var(--higgs)}
+.s2-card.positron .s2-freq-fill{background:var(--positron)}
+.s2-card.muon .s2-freq-fill{background:var(--muon)}
+.s2-card.gluon .s2-freq-fill{background:var(--gluon)}
+
+.s2-stat-row{display:flex;gap:12px;margin-top:8px;width:100%}
+.s2-mini-stat{flex:1;background:var(--panel2);padding:6px;text-align:center}
+.s2-mini-val{font-size:14px;font-weight:700;font-family:'Space Mono',monospace}
+.s2-mini-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.s2-desc{font-size:12px;color:var(--muted);text-align:center;line-height:1.4;margin-top:10px}
+
+/* ========== SLIDE 3 — PLAYGROUND ========== */
+#slide3{background:var(--bg)}
+.s3-layout{display:flex;height:100%;gap:0}
+.s3-left{width:320px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:28px 24px}
+.s3-right{flex:1;position:relative;overflow:hidden}
+#s3-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
+.s3-section-title{font-size:11px;letter-spacing:.2em;color:var(--orange);text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:16px}
+.s3-page-title{font-size:28px;font-weight:700;margin-bottom:4px}
+.s3-page-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.5}
+.s3-control{margin-bottom:16px}
+.s3-control label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;display:flex;justify-content:space-between;margin-bottom:8px}
+.s3-control label span{color:var(--text);font-family:'Space Mono',monospace}
+input[type=range]{width:100%;appearance:none;height:3px;background:#222;outline:none;border-radius:2px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:16px;height:16px;background:var(--text);border-radius:50%;cursor:pointer;box-shadow:0 0 8px rgba(255,255,255,0.4)}
+.s3-particle-btns{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.s3-pbt{background:none;border:1px solid var(--border);color:var(--text);padding:10px 16px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;cursor:pointer;text-align:left;transition:all .25s;display:flex;align-items:center;gap:10px;letter-spacing:.05em}
+.s3-pbt:hover{border-color:var(--orange);color:var(--orange)}
+
+/* Checkbox Style for Magnets */
+.s3-checkbox-label {display: flex !important;align-items: center !important;justify-content: flex-start !important;gap: 10px;cursor: pointer;font-size: 12px;color: var(--muted);text-transform: uppercase;letter-spacing: .1em;font-family: 'Space Mono', monospace;margin-bottom: 8px !important;}
+.s3-checkbox-label input {appearance: auto;width: 16px;height: 16px;cursor: pointer;}
+
+.s3-info-box{background:var(--panel2);border-left:2px solid var(--text);padding:14px;margin-top:auto}
+.s3-info-title{font-size:12px;color:var(--text);text-transform:uppercase;letter-spacing:.1em;font-family:'Space Mono',monospace;margin-bottom:6px}
+.s3-info-text{font-size:13px;color:#bbb;line-height:1.6}
+.s3-zoom-hint{position:absolute;top:20px;left:20px;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;background:rgba(0,0,0,.6);padding:8px 12px;border:1px solid var(--border)}
+.s3-energy-meter{margin-top:16px}
+.energy-bar-bg{width:100%;height:6px;background:#222;border-radius:3px;overflow:hidden;margin-top:6px}
+.energy-bar-fill{height:100%;border-radius:3px;transition:width .3s,background .3s}
+
+/* DIMENSION PANEL */
+.s3-dim-panel{position:absolute;right:0;top:0;bottom:0;width:240px;background:rgba(10,10,10,0.85);backdrop-filter:blur(5px);border-left:1px solid var(--border);display:flex;flex-direction:column;padding:20px;gap:12px;z-index:10;pointer-events:none}
+.dim-box{flex:1;border:1px solid #222;background:#050505;position:relative;border-radius:4px;overflow:hidden}
+.dim-label{position:absolute;top:8px;left:8px;font-size:10px;font-family:'Space Mono',monospace;color:var(--muted);z-index:2}
+.dim-canvas{width:100%;height:100%;display:block;position:absolute;inset:0}
+
+/* Page transition anim */
+@keyframes slideInLeft{from{transform:translateX(-60px);opacity:0}to{transform:none;opacity:1}}
+.slide.active .s1-content, .slide.active .s2-grid, .slide.active .s3-left{animation:slideInLeft .6s ease both}
+</style>
+</head>
+<body>
+<div id="app">
+
+<div class="slide active" id="slide1">
+  <canvas id="s1-canvas"></canvas>
+  <div class="s1-content">
+    <div class="s1-eyebrow">A unified theory of everything</div>
+    <div class="s1-title">
+      <div class="t-line1">The Universe</div>
+      <div class="t-line2">Is Vibrating</div>
+    </div>
+    <div class="s1-sub">General Relativity governs galaxies. Quantum Mechanics rules particles. Together, they crash — producing impossible infinities whenever gravity meets the quantum world.</div>
+    <div class="crisis-box">
+      <div class="crisis-title">⚠ The Crisis</div>
+      <div class="crisis-text">Treating particles as <strong style="color:var(--orange)">zero-dimensional points</strong> forces math to divide by zero — an "infinity explosion" that breaks both theories simultaneously inside black holes.</div>
+    </div>
+    <div class="s1-stats">
+      <div class="s1-stat"><div class="val">10</div><div class="lbl">Dimensions</div></div>
+      <div class="s1-stat"><div class="val">∞→0</div><div class="lbl">Problem Solved</div></div>
+      <div class="s1-stat"><div class="val">11</div><div class="lbl">M-Theory Dims</div></div>
+    </div>
+  </div>
+  <div class="s1-hint">SCROLL OR CLICK NEXT →</div>
+</div>
+
+<div class="slide" id="slide2">
+  <canvas id="s2-canvas"></canvas>
+  <div class="s2-content">
+    <div class="s2-header">
+      <div class="slide-label">02 — Vibration Modes</div>
+      <div class="s2-title">String Energy <span>Signatures</span></div>
+    </div>
+    <div class="s2-grid">
+      <div class="s2-card graviton" id="card-graviton">
+        <canvas class="s2-card-canvas" id="cc-graviton"></canvas>
+        <div class="s2-particle-name">GRAVITON</div>
+        <div class="s2-particle-type">Gravity Carrier · Boson</div>
+        <div class="s2-freq-bar"><div class="s2-freq-fill" style="width:0%" id="ff-graviton"></div></div>
+        <div class="s2-stat-row">
+          <div class="s2-mini-stat"><div class="s2-mini-val">Low</div><div class="s2-mini-lbl">Energy</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">0</div><div class="s2-mini-lbl">Charge</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">2</div><div class="s2-mini-lbl">Spin</div></div>
+        </div>
+        <div class="s2-desc">Slow, deep vibrations warp the background geometry of space-time itself.</div>
+      </div>
+      <div class="s2-card neutrino" id="card-neutrino">
+        <canvas class="s2-card-canvas" id="cc-neutrino"></canvas>
+        <div class="s2-particle-name">NEUTRINO</div>
+        <div class="s2-particle-type">Ghost Particle · Fermion</div>
+        <div class="s2-freq-bar"><div class="s2-freq-fill" style="width:0%" id="ff-neutrino"></div></div>
+        <div class="s2-stat-row">
+          <div class="s2-mini-stat"><div class="s2-mini-val">Low-Med</div><div class="s2-mini-lbl">Energy</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">0</div><div class="s2-mini-lbl">Charge</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">1/2</div><div class="s2-mini-lbl">Spin</div></div>
+        </div>
+        <div class="s2-desc">Barely interacts with normal matter. Passes through planets unobstructed.</div>
+      </div>
+      <div class="s2-card photon" id="card-photon">
+        <canvas class="s2-card-canvas" id="cc-photon"></canvas>
+        <div class="s2-particle-name">PHOTON</div>
+        <div class="s2-particle-type">Force Carrier · Boson</div>
+        <div class="s2-freq-bar"><div class="s2-freq-fill" style="width:0%" id="ff-photon"></div></div>
+        <div class="s2-stat-row">
+          <div class="s2-mini-stat"><div class="s2-mini-val">Medium</div><div class="s2-mini-lbl">Energy</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">0</div><div class="s2-mini-lbl">Charge</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">1</div><div class="s2-mini-lbl">Spin</div></div>
+        </div>
+        <div class="s2-desc">Smooth, traveling waves representing pure electromagnetic energy.</div>
+      </div>
+      <div class="s2-card positron" id="card-positron">
+        <canvas class="s2-card-canvas" id="cc-positron"></canvas>
+        <div class="s2-particle-name">POSITRON</div>
+        <div class="s2-particle-type">Antimatter · Fermion</div>
+        <div class="s2-freq-bar"><div class="s2-freq-fill" style="width:0%" id="ff-positron"></div></div>
+        <div class="s2-stat-row">
+          <div class="s2-mini-stat"><div class="s2-mini-val">Medium</div><div class="s2-mini-lbl">Energy</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">+1</div><div class="s2-mini-lbl">Charge</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">1/2</div><div class="s2-mini-lbl">Spin</div></div>
+        </div>
+        <div class="s2-desc">Anti-electron. Identical mass but opposite positive charge.</div>
+      </div>
+      <div class="s2-card electron" id="card-electron">
+        <canvas class="s2-card-canvas" id="cc-electron"></canvas>
+        <div class="s2-particle-name">ELECTRON</div>
+        <div class="s2-particle-type">Matter Particle · Fermion</div>
+        <div class="s2-freq-bar"><div class="s2-freq-fill" style="width:0%" id="ff-electron"></div></div>
+        <div class="s2-stat-row">
+          <div class="s2-mini-stat"><div class="s2-mini-val">Med-High</div><div class="s2-mini-lbl">Energy</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">−1</div><div class="s2-mini-lbl">Charge</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">1/2</div><div class="s2-mini-lbl">Spin</div></div>
+        </div>
+        <div class="s2-desc">Tight, rapid oscillations generate mass and electric charge interactions.</div>
+      </div>
+      <div class="s2-card muon" id="card-muon">
+        <canvas class="s2-card-canvas" id="cc-muon"></canvas>
+        <div class="s2-particle-name">MUON</div>
+        <div class="s2-particle-type">Heavy Matter · Fermion</div>
+        <div class="s2-freq-bar"><div class="s2-freq-fill" style="width:0%" id="ff-muon"></div></div>
+        <div class="s2-stat-row">
+          <div class="s2-mini-stat"><div class="s2-mini-val">High</div><div class="s2-mini-lbl">Energy</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">−1</div><div class="s2-mini-lbl">Charge</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">1/2</div><div class="s2-mini-lbl">Spin</div></div>
+        </div>
+        <div class="s2-desc">A heavier, highly unstable cousin of the electron that decays quickly.</div>
+      </div>
+      <div class="s2-card gluon" id="card-gluon">
+        <canvas class="s2-card-canvas" id="cc-gluon"></canvas>
+        <div class="s2-particle-name">GLUON</div>
+        <div class="s2-particle-type">Strong Force · Boson</div>
+        <div class="s2-freq-bar"><div class="s2-freq-fill" style="width:0%" id="ff-gluon"></div></div>
+        <div class="s2-stat-row">
+          <div class="s2-mini-stat"><div class="s2-mini-val">Very High</div><div class="s2-mini-lbl">Energy</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">0</div><div class="s2-mini-lbl">Charge</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">1</div><div class="s2-mini-lbl">Spin</div></div>
+        </div>
+        <div class="s2-desc">Binds quarks together tightly using the strong nuclear force.</div>
+      </div>
+      <div class="s2-card quark" id="card-quark">
+        <canvas class="s2-card-canvas" id="cc-quark"></canvas>
+        <div class="s2-particle-name">QUARK</div>
+        <div class="s2-particle-type">Building Block · Fermion</div>
+        <div class="s2-freq-bar"><div class="s2-freq-fill" style="width:0%" id="ff-quark"></div></div>
+        <div class="s2-stat-row">
+          <div class="s2-mini-stat"><div class="s2-mini-val">Extreme</div><div class="s2-mini-lbl">Energy</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">±2/3</div><div class="s2-mini-lbl">Charge</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">1/2</div><div class="s2-mini-lbl">Spin</div></div>
+        </div>
+        <div class="s2-desc">High tension creates strong force bindings, locking them inside protons.</div>
+      </div>
+      <div class="s2-card higgs" id="card-higgs">
+        <canvas class="s2-card-canvas" id="cc-higgs"></canvas>
+        <div class="s2-particle-name">HIGGS BOSON</div>
+        <div class="s2-particle-type">Mass Giver · Boson</div>
+        <div class="s2-freq-bar"><div class="s2-freq-fill" style="width:0%" id="ff-higgs"></div></div>
+        <div class="s2-stat-row">
+          <div class="s2-mini-stat"><div class="s2-mini-val">Maximum</div><div class="s2-mini-lbl">Energy</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">0</div><div class="s2-mini-lbl">Charge</div></div>
+          <div class="s2-mini-stat"><div class="s2-mini-val">0</div><div class="s2-mini-lbl">Spin</div></div>
+        </div>
+        <div class="s2-desc">Massive, unstable excitation of the field that decays instantly into lighter particles.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="slide" id="slide3">
+  <div class="s3-layout">
+    <div class="s3-left">
+      <div class="s3-section-title">03 — Playground</div>
+      <div class="s3-page-title">Tune the String</div>
+      <div class="s3-page-sub">Adjust inputs to reshape vibration. The combined string energy will dynamically generate different fundamental particles.</div>
+
+      <div class="s3-particle-btns">
+        <button class="s3-pbt" id="pb-clear" onclick="clearStrings()" style="justify-content:center;">
+          ✕ Clear All Strings
+        </button>
+      </div>
+
+      <div class="s3-control">
+        <label>Zoom <span id="zoom-val">100%</span></label>
+        <input type="range" min="0" max="100" value="100" id="zoom-slider" oninput="updateString()">
+      </div>
+      <div class="s3-control">
+        <label>Frequency <span id="freq-val">9</span></label>
+        <input type="range" min="1" max="12" value="9" id="freq-slider" oninput="updateString()">
+      </div>
+      <div class="s3-control">
+        <label>Amplitude <span id="amp-val">28</span></label>
+        <input type="range" min="10" max="80" value="28" id="amp-slider" oninput="updateString()">
+      </div>
+      <div class="s3-control">
+        <label>Tension <span id="tens-val">8</span></label>
+        <input type="range" min="1" max="10" value="8" id="tens-slider" oninput="updateString()">
+      </div>
+
+      <div class="s3-control" style="border-top: 1px solid var(--border); padding-top: 16px; margin-top: 16px;">
+        <label class="s3-checkbox-label">
+          <input type="checkbox" class="check-blue" onchange="mag1.active = this.checked">
+          <span style="color:#0ea5e9; font-family:'Rajdhani',sans-serif; letter-spacing:0; text-transform:none; font-size:15px; font-weight:600;">Enable Blue Pole (-) Field</span>
+        </label>
+        <label class="s3-checkbox-label" style="margin-bottom:0 !important;">
+          <input type="checkbox" class="check-red" onchange="mag2.active = this.checked">
+          <span style="color:#ef4444; font-family:'Rajdhani',sans-serif; letter-spacing:0; text-transform:none; font-size:15px; font-weight:600;">Enable Red Pole (+) Field</span>
+        </label>
+      </div>
+
+      <div class="s3-energy-meter">
+        <div style="font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Energy Level</div>
+        <div class="energy-bar-bg"><div class="energy-bar-fill" id="energy-fill" style="width:50%;background:hsl(25, 90%, 60%)"></div></div>
+      </div>
+
+      <div class="s3-info-box" id="s3-info">
+        <div class="s3-info-title" id="info-title">Electron Mode</div>
+        <div class="s3-info-text" id="info-text">Matter Particle: High-frequency oscillations and charge.</div>
+      </div>
+    </div>
+
+    <div class="s3-right">
+      <canvas id="s3-canvas"></canvas>
+      <div class="s3-zoom-hint">PRESS &amp; DRAG TO PLACE STRING · DRAG MAGNETS</div>
+
+      <div class="s3-dim-panel">
+        <div>
+            <div class="s3-section-title" style="margin-bottom:2px">Calabi-Yau Manifolds</div>
+            <div style="font-size:11px; color:var(--muted); line-height:1.4">Cross-section visualizer of extra dimensional folding</div>
+        </div>
+        <div class="dim-box">
+            <div class="dim-label">DIM 4 (x, w)</div>
+            <canvas id="dim-cv-1" class="dim-canvas"></canvas>
+        </div>
+        <div class="dim-box">
+            <div class="dim-label">DIM 5 (y, v)</div>
+            <canvas id="dim-cv-2" class="dim-canvas"></canvas>
+        </div>
+        <div class="dim-box">
+            <div class="dim-label">DIM 6 (z, u)</div>
+            <canvas id="dim-cv-3" class="dim-canvas"></canvas>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="nav">
+  <button class="nav-btn" id="prev-btn" onclick="goSlide(-1)">← Prev</button>
+  <div class="nav-dot active" onclick="goTo(0)"></div>
+  <div class="nav-dot" onclick="goTo(1)"></div>
+  <div class="nav-dot" onclick="goTo(2)"></div>
+  <button class="nav-btn" id="next-btn" onclick="goSlide(1)">Next →</button>
+</div>
+
+<script>
+// ---- SLIDE MANAGER ----
+let curSlide = 0;
+
+// Magnet State
+let mag1 = { x: 0, y: 0, active: false, color: '#0ea5e9', label: 'POLE -', rgb: '14, 165, 233', sign: 1 };
+let mag2 = { x: 0, y: 0, active: false, color: '#ef4444', label: 'POLE +', rgb: '239, 68, 68', sign: -1 };
+let draggingMag = null;
+
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.nav-dot');
+function goTo(i){
+  slides[curSlide].classList.remove('active');
+  dots[curSlide].classList.remove('active');
+  curSlide = Math.max(0, Math.min(2, i));
+  slides[curSlide].classList.add('active');
+  dots[curSlide].classList.add('active');
+  if(curSlide===1) initSlide2();
+  if(curSlide===2) initSlide3();
+}
+function goSlide(d){goTo(curSlide+d)}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') goSlide(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') goSlide(-1);
+});
+
+// ---- SLIDE 1: AMBIENT STRINGS ----
+(function(){
+  const cv=document.getElementById('s1-canvas');
+  const ctx=cv.getContext('2d');
+  let W,H,strings=[],particles=[];
+  function resize(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;initS1()}
+  function initS1(){
+    strings=[];
+    for(let i=0;i<22;i++){
+      strings.push({
+        x:Math.random()*W,y:Math.random()*H,
+        len:80+Math.random()*120,
+        freq:1+Math.random()*6,
+        amp: 20 + Math.random() * 45,
+        phase:Math.random()*Math.PI*2,
+        speed:.004+Math.random()*.012,
+        hue:Math.random()<.55?'orange':'green',
+        alpha: 0.4 + Math.random() * 0.5,
+        lineWidth: 1.5 + Math.random() * 1.5,
+        drift:{x:(Math.random()-.5)*.3,y:(Math.random()-.5)*.3}
+      });
+    }
+    particles=[];
+    for(let i=0;i<6;i++) spawnParticle();
+  }
+  function spawnParticle(){
+    particles.push({
+      x:Math.random()*W,y:Math.random()*H,
+      vx:(Math.random()-.5)*1.5,vy:(Math.random()-.5)*1.5,
+      r:3+Math.random()*4,
+      color:Math.random()<.5?'#f97316':'#22c55e',
+      trail:[],alpha:Math.random()*.6+.4
+    });
+  }
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='rgba(10,10,10,.35)';
+    ctx.fillRect(0,0,W,H);
+    strings.forEach(s=>{
+      s.x+=s.drift.x; s.y+=s.drift.y;
+      if(s.x<-150)s.x=W+50; if(s.x>W+150)s.x=-50;
+      if(s.y<-150)s.y=H+50; if(s.y>H+150)s.y=-50;
+      ctx.beginPath();
+      const steps=60;
+      for(let i=0;i<=steps;i++){
+        const frac=i/steps;
+        const px=s.x+s.len*(frac-.5);
+        const env=Math.sin(frac*Math.PI);
+        const py=s.y+env*s.amp*Math.sin(s.freq*frac*Math.PI*2+s.phase+t*s.speed*60);
+        i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+      }
+      ctx.strokeStyle=s.hue==='orange'?`rgba(249,115,22,${s.alpha})`:`rgba(34,197,94,${s.alpha})`;
+      ctx.lineWidth=s.lineWidth;
+      ctx.shadowColor=s.hue==='orange'?`rgba(249,115,22,${s.alpha})`:`rgba(34,197,94,${s.alpha})`;
+      ctx.shadowBlur=8;
+      ctx.stroke();
+      ctx.shadowBlur=0;
+      s.phase+=.008;
+    });
+    particles.forEach(p=>{
+      p.trail.push({x:p.x,y:p.y});
+      if(p.trail.length>18) p.trail.shift();
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W) p.vx*=-1;
+      if(p.y<0||p.y>H) p.vy*=-1;
+      p.trail.forEach((pt,i)=>{
+        ctx.beginPath();
+        ctx.arc(pt.x,pt.y,p.r*(i/p.trail.length),0,Math.PI*2);
+        ctx.fillStyle=p.color.replace(')',`,${p.alpha*(i/p.trail.length)})`).replace('rgb','rgba').replace('##','#');
+        ctx.globalAlpha=i/p.trail.length*.5;
+        ctx.fill();
+        ctx.globalAlpha=1;
+      });
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.color;
+      ctx.globalAlpha=p.alpha;
+      ctx.shadowColor=p.color;
+      ctx.shadowBlur=12;
+      ctx.fill();
+      ctx.globalAlpha=1;
+      ctx.shadowBlur=0;
+    });
+    requestAnimationFrame(draw);
+  }
+  new ResizeObserver(resize).observe(cv);
+  requestAnimationFrame(draw);
+})();
+
+// ---- SLIDE 2: CARD STRINGS ----
+let s2inited=false;
+function initSlide2(){
+  if(s2inited) return; s2inited=true;
+  const configs=[
+    {id:'cc-graviton',color:'#a78bfa',freq:2,amp:35,speed:.007,ff:'ff-graviton',fw:'10%'},
+    {id:'cc-neutrino',color:'#22d3ee',freq:3,amp:15,speed:.01,ff:'ff-neutrino',fw:'20%'},
+    {id:'cc-photon',color:'#22c55e',freq:5,amp:25,speed:.014,ff:'ff-photon',fw:'30%'},
+    {id:'cc-positron',color:'#3b82f6',freq:7,amp:18,speed:.02,ff:'ff-positron',fw:'45%'},
+    {id:'cc-electron',color:'#f97316',freq:8,amp:18,speed:.02,ff:'ff-electron',fw:'55%'},
+    {id:'cc-muon',color:'#8b5cf6',freq:9,amp:20,speed:.022,ff:'ff-muon',fw:'70%'},
+    {id:'cc-gluon',color:'#ef4444',freq:10,amp:10,speed:.03,ff:'ff-gluon',fw:'80%'},
+    {id:'cc-quark',color:'#ec4899',freq:11,amp:28,speed:.025,ff:'ff-quark',fw:'90%'},
+    {id:'cc-higgs',color:'#eab308',freq:12,amp:38,speed:.035,ff:'ff-higgs',fw:'100%'}
+  ];
+  configs.forEach(cfg=>{
+    const cv=document.getElementById(cfg.id);
+    const ctx=cv.getContext('2d');
+    let W,H;
+    function resize(){W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight}
+    new ResizeObserver(resize).observe(cv);
+    resize();
+    let phase=0;
+    function draw(){
+      if(!document.getElementById('slide2').classList.contains('active')){requestAnimationFrame(draw);return}
+      ctx.clearRect(0,0,W,H);
+      const gradient=ctx.createLinearGradient(0,0,W,0);
+      gradient.addColorStop(0,'rgba(0,0,0,0)');
+      gradient.addColorStop(.15,cfg.color);
+      gradient.addColorStop(.85,cfg.color);
+      gradient.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.beginPath();
+      const steps=80;
+      const margin=W*.1;
+      for(let i=0;i<=steps;i++){
+        const frac=i/steps;
+        const px=margin+frac*(W-margin*2);
+        const env=Math.sin(frac*Math.PI);
+        const py=H/2+env*cfg.amp*Math.sin(cfg.freq*frac*Math.PI*2+phase);
+        i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+      }
+      ctx.strokeStyle=gradient;
+      ctx.lineWidth=2;
+      ctx.shadowColor=cfg.color;
+      ctx.shadowBlur=8;
+      ctx.stroke();
+      ctx.shadowBlur=0;
+      [margin,W-margin].forEach(ex=>{
+        ctx.beginPath();
+        ctx.arc(ex,H/2,4,0,Math.PI*2);
+        ctx.fillStyle=cfg.color;
+        ctx.fill();
+      });
+      phase+=cfg.speed*60*.016;
+      requestAnimationFrame(draw);
+    }
+    requestAnimationFrame(draw);
+    setTimeout(()=>{document.getElementById(cfg.ff).style.width=cfg.fw},300);
+  });
+
+  // Slide 2 Background Grid
+  const bg=document.getElementById('s2-canvas');
+  const bctx=bg.getContext('2d');
+  let bW,bH;
+  function bResize(){bW=bg.width=bg.offsetWidth;bH=bg.height=bg.offsetHeight}
+  new ResizeObserver(bResize).observe(bg);
+  bResize();
+  let bgPhase=0;
+  function bgDraw(){
+    bctx.clearRect(0,0,bW,bH);
+    for(let i=0;i<6;i++){
+      bctx.beginPath();
+      const y=bH*.15+i*(bH*.14);
+      const steps=100;
+      for(let j=0;j<=steps;j++){
+        const x=j/steps*bW;
+        const py=y+8*Math.sin(j*.08+bgPhase+i*.7);
+        j===0?bctx.moveTo(x,py):bctx.lineTo(x,py);
+      }
+      bctx.strokeStyle=`rgba(249,115,22,${.03-.004*i})`;
+      bctx.lineWidth=1;
+      bctx.stroke();
+    }
+    bgPhase+=.008;
+    requestAnimationFrame(bgDraw);
+  }
+  requestAnimationFrame(bgDraw);
+}
+
+// ---- SLIDE 3: INTERACTIVE PLAYGROUND ----
+let s3inited=false;
+let s3Particle='electron';
+let s3Strings=[];
+let s3Particles=[];
+let s3DragIdx=-1;
+let s3DragNode=-1;
+let s3Creating=false;
+let freq=9,amp=28,tension=8,hue=25,zoom=100;
+
+const particleInfo = {
+  graviton: { title: 'Graviton (Low Energy)', text: 'Spacetime Fabric: Slow, heavy vibrations that physically warp the geometry of the background grid.' },
+  neutrino: { title: 'Neutrino (Low-Med Energy)', text: 'Ghost Particle: Extremely low mass. Barely interacts with anything, ignoring magnetic fields entirely.' },
+  photon: { title: 'Photon (Medium Energy)', text: 'Force Carrier: Pure energy packet. Casts a traveling light aura that physically shrinks as energy dissipates.' },
+  positron: { title: 'Positron (Medium Energy)', text: 'Antimatter: The anti-electron. Same mass, but positive charge causes it to deflect in the opposite direction in a magnetic field.' },
+  electron: { title: 'Electron (Med-High Energy)', text: 'Matter Particle: Moderate oscillations and charge. Its string is noisy and reacts to magnetic fields.' },
+  muon: { title: 'Muon (High Energy)', text: 'Heavy Electron: Like an electron but much heavier and highly unstable. Decays quickly.' },
+  gluon: { title: 'Gluon (Very High Energy)', text: 'Strong Force Carrier: Binds quarks together. Moves in tight, spring-like spirals.' },
+  quark: { title: 'Quark (Extreme Energy)', text: 'Fundamental Building Block: High tension creates strong force interactions, binding in tight, chaotic clusters.' },
+  higgs: { title: 'Higgs Boson (Max Energy)', text: 'Mass Giver: Massive, unstable excitation of the field. Decays rapidly into a shower of lesser particles.' }
+};
+
+function clearStrings(){
+  s3Strings=[];
+  s3Particles=[];
+}
+
+function updateString(){
+  zoom = +document.getElementById('zoom-slider').value;
+  freq = +document.getElementById('freq-slider').value;
+  amp = +document.getElementById('amp-slider').value;
+  tension = +document.getElementById('tens-slider').value;
+
+  const stringEnergy = freq * tension;
+
+  if (stringEnergy < 14) {
+      s3Particle = 'graviton'; hue = 258; // Purple
+  } else if (stringEnergy < 28) {
+      s3Particle = 'neutrino'; hue = 180; // Cyan
+  } else if (stringEnergy < 42) {
+      s3Particle = 'photon'; hue = 142;   // Green
+  } else if (stringEnergy < 56) {
+      s3Particle = 'positron'; hue = 215; // Blue
+  } else if (stringEnergy < 70) {
+      s3Particle = 'electron'; hue = 25;  // Orange
+  } else if (stringEnergy < 84) {
+      s3Particle = 'muon'; hue = 260;     // Violet
+  } else if (stringEnergy < 98) {
+      s3Particle = 'gluon'; hue = 0;      // Red
+  } else if (stringEnergy < 112) {
+      s3Particle = 'quark'; hue = 320;    // Pink
+  } else {
+      s3Particle = 'higgs'; hue = 50;     // Gold
+  }
+
+  document.getElementById('zoom-val').textContent=zoom+'%';
+  document.getElementById('freq-val').textContent=freq;
+  document.getElementById('amp-val').textContent=amp;
+  document.getElementById('tens-val').textContent=tension;
+
+  const info = particleInfo[s3Particle];
+  document.getElementById('info-title').textContent = info.title;
+  document.getElementById('info-text').textContent = info.text;
+  document.getElementById('info-title').style.color = `hsl(${hue}, 90%, 60%)`;
+  document.getElementById('s3-info').style.borderLeftColor = `hsl(${hue}, 90%, 60%)`;
+
+  const energyDisplay = Math.min(1, (stringEnergy / 120));
+  document.getElementById('energy-fill').style.width = (energyDisplay * 100) + '%';
+  document.getElementById('energy-fill').style.background = `hsl(${hue}, 90%, 60%)`;
+
+  s3Strings.forEach(s => {
+    s.freq = freq; s.amp = amp; s.tension = tension; s.type = s3Particle; s.hue = hue;
+  });
+}
+
+function initSlide3(){
+  if(s3inited) return; s3inited=true;
+
+  // Main Canvas
+  const cv=document.getElementById('s3-canvas');
+  const ctx=cv.getContext('2d');
+
+  // Dimension Canvases
+  const dimCanvases = [1, 2, 3].map(i => document.getElementById(`dim-cv-${i}`));
+  const dimCtxs = dimCanvases.map(c => c.getContext('2d'));
+
+  let W,H;
+  function resize(){
+    W=cv.width=cv.offsetWidth;
+    H=cv.height=cv.offsetHeight;
+    if(mag1.x === 0){ // Init Magnet Positions
+      mag1.x = W/2; mag1.y = H*0.15;
+      mag2.x = W/2; mag2.y = H*0.85;
+    }
+    // Resize Dimension Canvases
+    dimCanvases.forEach(c => {
+        c.width = c.parentElement.offsetWidth;
+        c.height = c.parentElement.offsetHeight;
+    });
+  }
+  new ResizeObserver(resize).observe(cv); resize();
+
+  function drawGrid(){
+    const gap = 45;
+    ctx.strokeStyle = '#181818';
+    ctx.lineWidth = 1;
+    for(let x=0; x<W+gap; x+=gap){
+      ctx.beginPath();
+      for(let y=0; y<H+gap; y+=10){
+        let tx = x, ty = y;
+        s3Particles.filter(p=>p.type==='graviton').forEach(g=>{
+          const dx=x-g.x, dy=y-g.y;
+          const dist=Math.sqrt(dx*dx+dy*dy);
+          const force=Math.max(0, (150-dist)/150)*40;
+          tx -= (dx/dist)*force;
+          ty -= (dy/dist)*force;
+        });
+        y===0?ctx.moveTo(tx,ty):ctx.lineTo(tx,ty);
+      }
+      ctx.stroke();
+    }
+    for(let y=0; y<H+gap; y+=gap){
+      ctx.beginPath();
+      for(let x=0; x<W+gap; x+=10){
+        let tx = x, ty = y;
+        s3Particles.filter(p=>p.type==='graviton').forEach(g=>{
+          const dx=x-g.x, dy=y-g.y;
+          const dist=Math.sqrt(dx*dx+dy*dy);
+          const force=Math.max(0, (150-dist)/150)*40;
+          tx -= (dx/dist)*force;
+          ty -= (dy/dist)*force;
+        });
+        x===0?ctx.moveTo(tx,ty):ctx.lineTo(tx,ty);
+      }
+      ctx.stroke();
+    }
+  }
+
+  function drawString(s,t){
+    const colFade = `hsla(${s.hue}, 90%, 60%, 0.8)`;
+    const cx=(s.x1+s.x2)/2, cy=(s.y1+s.y2)/2;
+    const zf=zoom/100;
+    const sx1=cx+(s.x1-cx)*zf, sy1=cy+(s.y1-cy)*zf;
+    const sx2=cx+(s.x2-cx)*zf, sy2=cy+(s.y2-cy)*zf;
+
+    const dx=sx2-sx1, dy=sy2-sy1;
+    const len=Math.sqrt(dx*dx+dy*dy);
+    const nx=len===0?0:-dy/len, ny=len===0?0:dx/len;
+
+    ctx.beginPath();
+    const steps=140;
+    for(let i=0;i<=steps;i++){
+      const frac=i/steps;
+      const px=sx1+frac*(sx2-sx1);
+      const py=sy1+frac*(sy2-sy1);
+      const env=Math.sin(frac*Math.PI);
+      let wave=env*s.amp*zf*Math.sin(s.freq*frac*Math.PI*2+s.phase+t*(.005+s.tension*.0008)*60);
+
+      if(s.type==='electron' || s.type==='positron' || s.type==='quark') wave += (Math.random()-.5)*(s.amp*zf)*0.15;
+
+      ctx.lineTo(px+nx*wave, py+ny*wave);
+    }
+    ctx.strokeStyle=colFade;
+    ctx.lineWidth=s.type==='graviton'?3:1.8;
+    ctx.shadowColor=`hsl(${s.hue}, 90%, 60%)`;
+    ctx.shadowBlur=s===s3Strings[s3Strings.length-1]?14:6;
+    ctx.stroke();
+    ctx.shadowBlur=0;
+
+    for(let d=1; d<=3; d++) {
+        ctx.beginPath();
+        for(let i=0; i<=steps; i++){
+            const frac=i/steps;
+            const px=sx1+frac*(sx2-sx1);
+            const py=sy1+frac*(sy2-sy1);
+            const env=Math.sin(frac*Math.PI);
+            let dimWave = env * (s.amp * zf / (d * 1.5)) * Math.sin((s.freq + d*2)*frac*Math.PI*2 + s.phase*d + t*(.01)*60);
+            ctx.lineTo(px + nx*dimWave, py + ny*dimWave);
+        }
+        ctx.strokeStyle=`hsla(${s.hue}, 90%, 60%, ${0.25 / d})`;
+        ctx.lineWidth=1;
+        ctx.stroke();
+    }
+
+    [[sx1,sy1],[sx2,sy2]].forEach(([ex,ey])=>{
+      ctx.beginPath();
+      ctx.arc(ex,ey,5,0,Math.PI*2);
+      ctx.fillStyle=`hsl(${s.hue}, 90%, 60%)`;
+      ctx.fill();
+      if (zf > 0.05) {
+        ctx.beginPath();
+        ctx.arc(ex,ey,10,0,Math.PI*2);
+        ctx.strokeStyle=`hsla(${s.hue}, 90%, 60%, 0.5)`;
+        ctx.lineWidth=1;
+        ctx.stroke();
+      }
+    });
+  }
+
+  // Draw Extra Dimensions Panel
+  function drawDimensions(t) {
+    dimCtxs.forEach((dCtx, idx) => {
+        dCtx.clearRect(0,0, dCtx.canvas.width, dCtx.canvas.height);
+
+        // Background target rings
+        const cX = dCtx.canvas.width / 2;
+        const cY = dCtx.canvas.height / 2;
+        dCtx.beginPath();
+        dCtx.arc(cX, cY, 30, 0, Math.PI*2);
+        dCtx.arc(cX, cY, 60, 0, Math.PI*2);
+        dCtx.strokeStyle = 'rgba(255,255,255,0.05)';
+        dCtx.lineWidth = 1;
+        dCtx.stroke();
+
+        dCtx.beginPath();
+        dCtx.moveTo(cX, 0); dCtx.lineTo(cX, dCtx.canvas.height);
+        dCtx.moveTo(0, cY); dCtx.lineTo(dCtx.canvas.width, cY);
+        dCtx.stroke();
+
+        // Draw Lissajous figures for each active string to represent n-dimensional folding
+        s3Strings.forEach(s => {
+            dCtx.beginPath();
+            const steps = 100;
+            const ampMod = Math.min(80, s.amp * (zoom/100) * 1.2);
+            for(let i=0; i<=steps; i++){
+                const frac = i/steps;
+                const dimPhase = s.phase * (idx + 2);
+
+                // Complex folding equations
+                const xPhase = (s.freq + idx) * frac * Math.PI * 2 + dimPhase + t * 0.015;
+                const yPhase = (s.freq + idx * 2) * frac * Math.PI * 2 - dimPhase + t * 0.02;
+
+                const x = cX + Math.sin(xPhase) * ampMod * Math.cos(frac * Math.PI);
+                const y = cY + Math.sin(yPhase) * ampMod * Math.sin(frac * Math.PI);
+
+                i === 0 ? dCtx.moveTo(x,y) : dCtx.lineTo(x,y);
+            }
+            dCtx.strokeStyle = `hsla(${s.hue}, 90%, 60%, 0.7)`;
+            dCtx.lineWidth = 1.5;
+            dCtx.stroke();
+        });
+    });
+  }
+
+  let animT=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#0a0a0a';
+    ctx.fillRect(0,0,W,H);
+
+    drawGrid();
+    drawDimensions(animT);
+
+    if(s3Strings.length===0){
+      ctx.font='14px Space Mono, monospace';
+      ctx.fillStyle='rgba(255,255,255,.2)';
+      ctx.textAlign='center';
+      ctx.fillText('Press and drag anywhere to spawn a string',W/2,H/2-10);
+      ctx.fillText('Drag endpoints to reshape',W/2,H/2+18);
+      ctx.textAlign='left';
+    }
+
+    s3Strings.forEach(s=>{
+      s.phase+=.05;
+      const emitChance = 0.05 + (s.freq / 12) * 0.15;
+      if(Math.random() < emitChance) {
+        const zf = zoom / 100;
+        const mx = (s.x1+s.x2)/2 + (Math.random()-0.5)*s.amp * zf;
+        const my = (s.y1+s.y2)/2 + (Math.random()-0.5)*s.amp * zf;
+        const angle = Math.random() * Math.PI * 2;
+
+        const speed = s.type==='graviton' ? 2 : (s.type==='photon' ? 4 : 2.5);
+        s3Particles.push({
+          x: mx, y: my,
+          vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed,
+          hue: s.hue, type: s.type, life: 1, size: 1.5 + Math.random()*2.5
+        });
+      }
+      drawString(s,animT);
+    });
+
+    [mag1, mag2].forEach(m => {
+      ctx.beginPath();
+      ctx.rect(m.x - 40, m.y - 15, 80, 30);
+      ctx.fillStyle = '#111';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = m.active ? m.color : '#333';
+      ctx.stroke();
+      ctx.fillStyle = m.active ? m.color : '#555';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '11px Space Mono';
+      ctx.fillText(m.label, m.x, m.y);
+
+      if (m.active) {
+        ctx.globalCompositeOperation = 'lighter';
+        for(let r=45; r<=400; r+=50) {
+            ctx.beginPath();
+            ctx.arc(m.x, m.y, r + (animT*0.03)%50, 0, Math.PI*2);
+            ctx.strokeStyle = `rgba(${m.rgb}, ${0.15 * Math.max(0, (400-r)/400)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+        ctx.globalCompositeOperation = 'source-over';
+      }
+    });
+
+    for(let i = s3Particles.length - 1; i >= 0; i--) {
+      let p = s3Particles[i];
+
+      // MAGNET PHYSICS (Lorentz Force)
+      if (p.type === 'electron' || p.type === 'muon' || p.type === 'positron') {
+         [mag1, mag2].forEach(m => {
+           if(m.active) {
+               const dx = p.x - m.x;
+               const dy = p.y - m.y;
+               const dist = Math.sqrt(dx*dx + dy*dy);
+               if(dist < 450) {
+                   const B = Math.max(0, (450 - dist) / 450) * 0.08;
+                   if (p.type === 'positron') {
+                       // Positive charge deflects in the opposite direction
+                       p.vx -= p.vy * B * m.sign;
+                       p.vy += p.vx * B * m.sign;
+                   } else {
+                       // Negative charge (electron, muon)
+                       p.vx += p.vy * B * m.sign;
+                       p.vy -= p.vx * B * m.sign;
+                   }
+               }
+           }
+         });
+      }
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= 0.003;
+
+      if(p.life <= 0 || p.x<0 || p.x>W || p.y<0 || p.y>H) {
+        s3Particles.splice(i, 1);
+        continue;
+      }
+
+      // PARTICLE RENDERING STYLES
+      if(p.type === 'electron') {
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size*1.5, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${p.life})`;
+        ctx.shadowColor = `hsl(${p.hue}, 90%, 60%)`;
+        ctx.shadowBlur = 10 * p.life;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        for(let j=0; j<2; j++){
+          ctx.beginPath(); ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x+(Math.random()-.5)*15, p.y+(Math.random()-.5)*15);
+          ctx.strokeStyle = `hsla(${p.hue}, 90%, 60%, ${p.life})`;
+          ctx.stroke();
+        }
+
+      } else if(p.type === 'positron') {
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size*1.5, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 70%, ${p.life})`;
+        ctx.shadowColor = `hsl(${p.hue}, 90%, 60%)`;
+        ctx.shadowBlur = 10 * p.life;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        for(let j=0; j<2; j++){
+          ctx.beginPath(); ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p.x+(Math.random()-.5)*15, p.y+(Math.random()-.5)*15);
+          ctx.strokeStyle = `hsla(${p.hue}, 90%, 70%, ${p.life})`;
+          ctx.stroke();
+        }
+
+      } else if (p.type === 'muon') {
+        p.life -= 0.008;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size*2.2, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${p.life})`;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(p.x + (Math.random()-.5)*4, p.y + (Math.random()-.5)*4, p.size*1.5, 0, Math.PI*2);
+        ctx.strokeStyle = `hsla(${p.hue}, 90%, 60%, ${p.life*0.5})`;
+        ctx.stroke();
+
+      } else if (p.type === 'gluon') {
+        const spiralX = p.x + Math.cos(animT * 0.1) * 6;
+        const spiralY = p.y + Math.sin(animT * 0.1) * 6;
+        ctx.beginPath();
+        ctx.arc(spiralX, spiralY, p.size*1.2, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${p.hue}, 100%, 50%, ${p.life})`;
+        ctx.shadowColor = `hsl(${p.hue}, 100%, 50%)`;
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(spiralX, spiralY);
+        ctx.strokeStyle = `hsla(${p.hue}, 100%, 50%, ${p.life*0.5})`;
+        ctx.stroke();
+
+      } else if (p.type === 'photon') {
+        const lightRadius = p.size * 35;
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, lightRadius);
+        grad.addColorStop(0, `hsla(${p.hue}, 90%, 60%, ${p.life * 0.35})`);
+        grad.addColorStop(1, 'transparent');
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.beginPath(); ctx.arc(p.x, p.y, lightRadius, 0, Math.PI*2);
+        ctx.fillStyle = grad; ctx.fill();
+        ctx.globalCompositeOperation = 'source-over';
+
+        ctx.beginPath();
+        const dir = Math.atan2(p.vy, p.vx);
+        const currentAmp = 15 * Math.pow(p.life, 1.2);
+        for(let j=-15; j<=15; j+=2){
+          const wave = Math.sin(j*0.4 + animT*0.1) * currentAmp;
+          const lx = p.x + j*Math.cos(dir) - wave*Math.sin(dir);
+          const ly = p.y + j*Math.sin(dir) + wave*Math.cos(dir);
+          j===-15 ? ctx.moveTo(lx, ly) : ctx.lineTo(lx, ly);
+        }
+        ctx.strokeStyle = `hsla(${p.hue}, 90%, 60%, ${p.life})`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+      } else if (p.type === 'neutrino') {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - p.vx*2, p.y - p.vy*2);
+        ctx.strokeStyle = `hsla(${p.hue}, 80%, 70%, ${p.life * 0.6})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+      } else if (p.type === 'quark') {
+        p.vx += (Math.random() - 0.5) * 1.5;
+        p.vy += (Math.random() - 0.5) * 1.5;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size*1.2, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${p.hue}, 100%, 50%, ${p.life})`;
+        ctx.fill();
+
+      } else if (p.type === 'higgs') {
+        p.life -= 0.01;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size*3, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${p.life})`;
+        ctx.shadowColor = `hsl(${p.hue}, 90%, 60%)`;
+        ctx.shadowBlur = 20 * p.life;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+
+        if (p.life <= 0) {
+            s3Particles.push({x: p.x, y: p.y, vx: 3, vy: 3, hue: 142, type: 'photon', life: 1, size: 2});
+            s3Particles.push({x: p.x, y: p.y, vx: -3, vy: -3, hue: 142, type: 'photon', life: 1, size: 2});
+        }
+
+      } else {
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size*2.5, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${p.hue}, 90%, 60%, ${p.life})`;
+        ctx.fill();
+      }
+    }
+
+    animT+=16;
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+
+  function getNodeAt(mx,my){
+    const zf = zoom/100;
+    for(let i=s3Strings.length-1;i>=0;i--){
+      const s=s3Strings[i];
+      const cx=(s.x1+s.x2)/2, cy=(s.y1+s.y2)/2;
+      const sx1 = cx + (s.x1 - cx)*zf;
+      const sy1 = cy + (s.y1 - cy)*zf;
+      const sx2 = cx + (s.x2 - cx)*zf;
+      const sy2 = cy + (s.y2 - cy)*zf;
+
+      if(dist(mx,my,sx1,sy1)<18) return {idx:i,node:1};
+      if(dist(mx,my,sx2,sy2)<18) return {idx:i,node:2};
+    }
+    return null;
+  }
+  function dist(ax,ay,bx,by){return Math.sqrt((ax-bx)**2+(ay-by)**2)}
+
+  cv.addEventListener('mousedown',e=>{
+    const r=cv.getBoundingClientRect();
+    const mx=e.clientX-r.left, my=e.clientY-r.top;
+
+    if (mx > W - 240) return; // Ignore clicks inside the dimension panel area
+
+    if (Math.abs(mx - mag1.x) < 40 && Math.abs(my - mag1.y) < 15) { draggingMag = mag1; e.preventDefault(); return; }
+    if (Math.abs(mx - mag2.x) < 40 && Math.abs(my - mag2.y) < 15) { draggingMag = mag2; e.preventDefault(); return; }
+
+    const hit=getNodeAt(mx,my);
+    if(hit){
+      s3DragIdx=hit.idx; s3DragNode=hit.node; s3Creating=false;
+      e.preventDefault();
+    } else {
+      s3Creating=true;
+      s3Strings.push({
+        x1:mx, y1:my, x2:mx+0.1, y2:my,
+        freq, amp, tension, type:s3Particle, hue:hue, phase:Math.random()*Math.PI*2
+      });
+      if(s3Strings.length>8) s3Strings.shift();
+      s3DragIdx=s3Strings.length-1;
+      s3DragNode=2;
+      e.preventDefault();
+    }
+  });
+
+  cv.addEventListener('mousemove',e=>{
+    const r=cv.getBoundingClientRect();
+    const mx=e.clientX-r.left, my=e.clientY-r.top;
+
+    if (draggingMag) {
+        draggingMag.x = mx;
+        draggingMag.y = my;
+        return;
+    }
+
+    if(s3DragIdx===-1) return;
+    const s=s3Strings[s3DragIdx];
+    const zf = zoom/100;
+    if (zf < 0.01) return;
+
+    if(s3DragNode===1){
+        s.x1 = (2*mx - s.x2*(1-zf)) / (1+zf);
+        s.y1 = (2*my - s.y2*(1-zf)) / (1+zf);
+    }else{
+        s.x2 = (2*mx - s.x1*(1-zf)) / (1+zf);
+        s.y2 = (2*my - s.y1*(1-zf)) / (1+zf);
+    }
+  });
+
+  cv.addEventListener('mouseup',()=>{
+    if (draggingMag) { draggingMag = null; return; }
+
+    if(s3Creating && s3DragIdx !== -1){
+      const s = s3Strings[s3DragIdx];
+      if(dist(s.x1,s.y1,s.x2,s.y2) < 5){
+        s3Strings.splice(s3DragIdx, 1);
+      }
+    }
+    s3DragIdx=-1; s3DragNode=-1; s3Creating=false;
+  });
+
+  cv.addEventListener('touchstart',e=>{
+    const r=cv.getBoundingClientRect();
+    const t=e.touches[0];
+    const mx=t.clientX-r.left, my=t.clientY-r.top;
+
+    if (mx > W - 240) return;
+
+    if (Math.abs(mx - mag1.x) < 40 && Math.abs(my - mag1.y) < 15) { draggingMag = mag1; e.preventDefault(); return; }
+    if (Math.abs(mx - mag2.x) < 40 && Math.abs(my - mag2.y) < 15) { draggingMag = mag2; e.preventDefault(); return; }
+
+    const hit=getNodeAt(mx,my);
+    if(hit){
+      s3DragIdx=hit.idx; s3DragNode=hit.node; s3Creating=false;
+      e.preventDefault();
+    } else {
+      s3Creating=true;
+      s3Strings.push({
+        x1:mx, y1:my, x2:mx+0.1, y2:my,
+        freq, amp, tension, type:s3Particle, hue:hue, phase:Math.random()*Math.PI*2
+      });
+      if(s3Strings.length>8) s3Strings.shift();
+      s3DragIdx=s3Strings.length-1;
+      s3DragNode=2;
+      e.preventDefault();
+    }
+  },{passive:false});
+
+  cv.addEventListener('touchmove',e=>{
+    e.preventDefault();
+    const r=cv.getBoundingClientRect();
+    const t=e.touches[0];
+    const mx=t.clientX-r.left, my=t.clientY-r.top;
+
+    if (draggingMag) {
+        draggingMag.x = mx;
+        draggingMag.y = my;
+        return;
+    }
+
+    if(s3DragIdx===-1) return;
+    const s=s3Strings[s3DragIdx];
+    const zf = zoom/100;
+    if(zf < 0.01) return;
+
+    if(s3DragNode===1){
+        s.x1 = (2*mx - s.x2*(1-zf)) / (1+zf);
+        s.y1 = (2*my - s.y2*(1-zf)) / (1+zf);
+    }else{
+        s.x2 = (2*mx - s.x1*(1-zf)) / (1+zf);
+        s.y2 = (2*my - s.y1*(1-zf)) / (1+zf);
+    }
+  },{passive:false});
+
+  cv.addEventListener('touchend',()=>{
+    if (draggingMag) { draggingMag = null; return; }
+
+    if(s3Creating && s3DragIdx !== -1){
+      const s = s3Strings[s3DragIdx];
+      if(dist(s.x1,s.y1,s.x2,s.y2) < 5){
+        s3Strings.splice(s3DragIdx, 1);
+      }
+    }
+    s3DragIdx=-1; s3DragNode=-1; s3Creating=false;
+  });
+
+  updateString();
+}
+</script>
+</body>
+</html>
